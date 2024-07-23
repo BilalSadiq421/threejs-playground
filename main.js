@@ -1,18 +1,95 @@
 import * as THREE from 'three'
 //Orbit controls allow the camera to orbit around a target.
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { label, max, min } from 'three/examples/jsm/nodes/Nodes.js';
+
+import { Pane } from 'tweakpane';
+
+const pane =  new Pane()
+console.log(pane)
 
 //Scenes allow you to set up what and where is to be rendered by three.js. This is where you place objects, lights and cameras.
 const scene = new THREE.Scene()
 
 //BoxGeometry is a geometry class for a rectangular cuboid with a given 'width', 'height', and 'depth'. On creation, the cuboid is centred on the origin, with each edge parallel to one of the axes.
-const cubeGeometry = new THREE.BoxGeometry(1,1,1)
+let cubeGeometry = new THREE.BoxGeometry(1,1,1,12,12,12)
+
+const planeParameters ={
+  width: 1,
+  height: 1
+}
+
 //A material for drawing geometries in a simple shaded (flat or wireframe) way.
-const cubeMaterial = new THREE.MeshBasicMaterial({color: 'red'})
+const cubeMaterial = new THREE.MeshBasicMaterial({color: 'red', wireframe: true})
 
-const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+const firstMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+/*ADDING Meshes to a group
+// const secondMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+// secondMesh.position.x = 2
+// const thirdMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+// thirdMesh.position.x = -2
 
-scene.add(cubeMesh)
+// const group = new THREE.Group()
+// group.add(firstMesh)
+// group.add(secondMesh)
+ group.add(thirdMesh)*/
+
+
+ /*Pane Configurtion*/
+const planeFolders = pane.addFolder({
+  title: "Dimenstions"
+})
+
+planeFolders.addBinding(planeParameters, 'width', {
+  min: 0,
+  max:10,
+  step: 0.1,
+  label: 'Widht'
+}).on('change',(ev)=>{
+  cubeGeometry = new THREE.BoxGeometry(planeParameters.width, planeParameters.height, 1,12,12,12)
+  firstMesh.geometry = cubeGeometry
+})
+
+
+planeFolders.addBinding(planeParameters, 'height', {
+  min: 0,
+  max:10,
+  step: 0.1,
+  label: 'height'
+}).on('change',()=>{
+  cubeGeometry = new THREE.BoxGeometry(planeParameters.width, planeParameters.height, 1,12,12,12)
+  firstMesh.geometry = cubeGeometry
+})
+
+
+// scene.add(group)
+
+//Adding visual representation of axes in scene
+const axesHelper = new THREE.AxesHelper(2);
+//axes hlper can be added to the scene as well as mesh
+// scene.add(axesHelper)
+firstMesh.add(axesHelper)
+scene.add(firstMesh)
+
+/*PANE CONFIGURATIONS*/
+// pane.addBinding(firstMesh.scale, 'x', {
+//   min: 0,
+//   max: 10,
+//   step: 0.1,
+//   label: 'Scale X'
+// })
+// pane.addBinding(firstMesh.scale, 'y', {
+//   min: 0,
+//   max: 10,
+//   step: 0.1,
+//   label: 'Scale Y'
+// })
+// pane.addBinding(firstMesh.scale, 'z', {
+//   min: 0,
+//   max: 10,
+//   step: 0.1,
+//   label: 'Scale Z'
+// })
 
 const aspectRatio = window.innerWidth/window.innerHeight
 /**      CAMERA        **/
@@ -69,3 +146,9 @@ rerender()
 
 //Know about device pixel ratio
 // window.devicePixelRatio
+
+//Scale and Position
+//Every mesh inherits methods from 3d objects, so they also inherit properties like these. we can set all the scale axis together with scale.set(x,y,z)
+
+//Deg units selector
+// THREE.MathUtils.degToRad('degree in numbers')
