@@ -1,0 +1,3 @@
+- Install vite latest with npm create vite@latest, guide: https://vitejs.dev/guide/
+- cd to project and then run npm install for packages
+- install three.js, guide:  https://threejs.org/
