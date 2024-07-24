@@ -20,19 +20,25 @@ const planeParameters ={
 }
 
 //A material for drawing geometries in a simple shaded (flat or wireframe) way.
-const cubeMaterial = new THREE.MeshBasicMaterial({color: 'red', wireframe: true})
+const cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00})
+//Setting mesh basic material properties
+cubeMaterial.transparent = true
+cubeMaterial.opacity = 0.5
 
 const firstMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
-/*ADDING Meshes to a group
-// const secondMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
-// secondMesh.position.x = 2
-// const thirdMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
-// thirdMesh.position.x = -2
+//ADDING Meshes to a group
+const secondMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+secondMesh.position.x = 2
+const thirdMesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
+thirdMesh.position.x = -2
 
-// const group = new THREE.Group()
-// group.add(firstMesh)
-// group.add(secondMesh)
- group.add(thirdMesh)*/
+const group = new THREE.Group()
+group.add(firstMesh)
+group.add(secondMesh)
+group.add(thirdMesh)
+
+
+console.log(group)
 
 
  /*Pane Configurtion*/
@@ -62,14 +68,22 @@ planeFolders.addBinding(planeParameters, 'height', {
 })
 
 
-// scene.add(group)
+scene.add(group)
 
 //Adding visual representation of axes in scene
 const axesHelper = new THREE.AxesHelper(2);
 //axes hlper can be added to the scene as well as mesh
 // scene.add(axesHelper)
+
 firstMesh.add(axesHelper)
-scene.add(firstMesh)
+
+//ADDING FOG
+const fog = new THREE.Fog('white',1,10)
+scene.fog = fog
+
+//setting background color of scene
+scene.background = new THREE.Color('white')
+// scene.add(firstMesh)
 
 /*PANE CONFIGURATIONS*/
 // pane.addBinding(firstMesh.scale, 'x', {
